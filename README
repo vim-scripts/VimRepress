@@ -1,0 +1,22 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=3510
+
+VimRepress is a plugin for managing wordpress blog from Vim,  a rewritten  of vimscript #1953 , which is broken for years.
+
+Usage is simple, add commands listed:
+
+ :BlogList [<count>]
+ :BlogNew
+ :BlogOpen <id>
+ :BlogSave <draft|publish>
+ :BlogPreview <draft|publish>
+ :BlogUpload <file>
+ :BlogCode [<code type>]
+ :MarkdownPreview
+ :MarkdownNewPost
+
+More detailed about this commands, type :help vimpress while you have vimrepress installed.
+
+Release Note:  http://apt-blog.net/manage-multiple-wordpresses-with-new-vimpress
+SVN Version:  svn checkout http://ptcoding.googlecode.com/svn/trunk/vimpress
+
+

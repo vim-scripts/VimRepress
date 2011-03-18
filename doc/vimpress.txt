@@ -1,0 +1,67 @@
+*vimpress.txt*   Plugin for managing wordpress blog from Vim.
+
+Script:   blog.vim
+Author:   Adrien Friggeri <adrien@friggeri.net>
+          Pigeond <http://pigeond.net/blog/>
+          Preston M.[BOYPT] <pentie@gmail.com>
+          Justin Sattery <justin.slattery@fzysqr.com>
+License:  Same terms as Vim itself (see |license|)
+
+============================================================================
+
+*INSTALL*
+
+Download vimpress-1.x.x.zip, extract it in your .vim directory:
+
+  cd ~/.vim
+  unzip /where/you/downlaod/vimpress-1.x.x.zip
+
+*CONFIGURE*
+
+Edit ~/.vimrc , add a variable name VIMPRESS. Multiple blogs Config are support, written as array list.
+
+let VIMPRESS=[{'username':'user',
+               \'password':'pass',
+               \'blog_url':'http://your-first-blog.com/'
+               \},
+               \{'username':'user',
+               \'password':'pass',
+               \'blog_url':'http://your-second-blog.com/'
+               \}]
+
+Then save and quit, reopen a vim, you may use commands list in |USING|.
+
+
+*USING*
+
+Vimpress Commands: 
+
+>
+ :BlogList [<count>]
+< Lists post titles in your blog, defaultly recent 30, use an arg. to specify.
+>
+ :BlogNew
+< Open for a new post. Contents in current buffer will append in the post edit area.
+>
+ :BlogOpen <id>
+< Open a post <id> for editing.
+>
+ :BlogSave <draft|publish>
+< Saves the post, defaultly as draft, an arg. to specify.
+>
+ :BlogPreview <draft|publish>
+< Same as :BlogSave, will open a browser to preview current post. You have to login in your browser to preview the draft post.
+>
+ :BlogUpload <file>
+< Upload media file to blog. Appends img element after cursor.
+>
+ :BlogCode [<code type>]
+< Append a section of a <pre> element, which could be hilighted by wp-syntax plugin. When give a code type, will fillin the element for syntax.
+>
+ :MarkdownPreview
+< Preview text in current buffer as markdown, call markdown program in your system to convert, then open a browser windows for the html. File encoding is defaultly set to utf-8.
+>
+ :MarkdownNewPost
+< Convert a markdown written post into html and drop to the new post view.(like :BlogNew command.)
+
+
