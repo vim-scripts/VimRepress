@@ -5,7 +5,7 @@ elseif exists("b:current_syntax")
 endif
 sy match  blogeditorEntry       "^ *[0-9]*\t.*$"
 sy match  blogeditorComment     '^".*$'
-sy match  blogeditorIdent       '^".*:'
+sy match  blogeditorIdent       '^"[^:]*:'
 hi link blogeditorComment     Comment
 hi link blogeditorEntry       Directory
 hi link blogeditorIdent       Function

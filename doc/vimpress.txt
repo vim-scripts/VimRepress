@@ -11,14 +11,16 @@ License:  Same terms as Vim itself (see |license|)
 
 *INSTALL*
 
-Download vimpress-1.x.x.zip, extract it in your .vim directory:
+Download vimpress_1.x.x.zip, extract it in your .vim directory:
 
   cd ~/.vim
-  unzip /where/you/downlaod/vimpress-1.x.x.zip
+  unzip /where/you/downlaod/vimpress_1.x.x.zip
 
 *CONFIGURE*
 
-Edit ~/.vimrc , add a variable name VIMPRESS. Multiple blogs Config are support, written as array list.
+Edit ~/.vimrc , add a variable name VIMPRESS. Multiple blogs Config are supported, written as dictionarys in a array list.
+
+Example:
 
 let VIMPRESS=[{'username':'user',
                \'password':'pass',
@@ -30,6 +32,8 @@ let VIMPRESS=[{'username':'user',
                \}]
 
 Then save and quit, reopen a vim, you may use commands list in |USING|.
+
+If you need Markdown support, simply run `sudo apt-get install python-markdown' in Ubuntu. If you use other distributions (or OSs), refer to your package manager or the python-markdown project page: http://www.freewisdom.org/projects/python-markdown/Installation
 
 
 *USING*
@@ -59,9 +63,54 @@ Vimpress Commands:
 < Append a section of a <pre> element, which could be hilighted by wp-syntax plugin. When give a code type, will fillin the element for syntax.
 >
  :MarkdownPreview
-< Preview text in current buffer as markdown, call markdown program in your system to convert, then open a browser windows for the html. File encoding is defaultly set to utf-8.
+< Preview text in current buffer as markdown, call markdown program in your system to convert, then open a browser windows for the html. 
 >
  :MarkdownNewPost
-< Convert a markdown written post into html and drop to the new post view.(like :BlogNew command.)
+< Convert a markdown written post into html and drop to the new post view.(like :BlogNew command.) A title (in the first 10 lines) begins with '#' (syntax of header in markdown) will be copy to fill as post title.
+>
+ :BlogPageList
+ :BlogPageOpen
+ :BlogPageSave
+ :BlogPageNew
+< Commands to manage wordpress page. Usage are just same as explained above.
+
+*CHANGE LOG*
+
+ 2011 Mar. 24 [by Lenin Lee]
+               Fix: use setl instead of set to set option value;
+               Add: Detect current buffer content before switch to vimpress                 views, open a split buffer to avoid conflic.
+               Add: Commands to manage wordpress pages.
+
+               [by Preston]
+               Add: Auto charset convert for non-utf8 environment.(Win)
+               Add: Use python markdown module. Both markdown and markdown2
+               are supported.
+
+ 2011 Mar. 15 [by Preston]
+               Fix: MarkdownNewPost may override original mkd source file.
+               Add: MarkdownNewPost command detects title begins with
+                   "#" in first 10 lines of markdown source, copy the line
+                   striped "#" to the new post view.
+
+ 2011 Mar. 7  [by Preston]
+               Add: MarkdownPreview command to preiview markdown in browser.
+               Add: MarkdownNewPost command to convert a markdown
+               written post into html and set to the new post view.
 
 
+ 2011 Mar. 4  [by Preston]
+               Add: Move blog config info to personal .vimrc
+               Add: Multiple blog config is now supported with :BlogSwitch
+               command.
+               Add: Show which blog your editing at :BlogList view.
+               Fix: bug running :BlogList in the List view got error.
+
+ 2011 Feb. 15 [by Preston]
+                Add: BlogPreview Command.
+                Add: BlogCode command args to specify code type
+                Change: blog_url uses pure address.
+                Code: Some code pretty work.
+
+ 2010 August 20 [by Justin] - Fixed a bug with BlogSave command, and added 
+ feature to take an existing document and use the BlogNew command to 
+ convert it to a blog post (which can be saved with the header intact). 
