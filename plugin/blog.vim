@@ -17,10 +17,11 @@
 " 
 " Maintainer:	Adrien Friggeri <adrien@friggeri.net>
 "               Pigeond <http://pigeond.net/blog/>
-"               Preston M.[BOYPT] <pentie@gmail.com>
 "               Justin Sattery <justin.slattery@fzysqr.com>
 "               Lenin Lee <lenin.lee@gmail.com>
 "               Conner McDaniel <connermcd@gmail.com>
+"
+"     Forked:   Preston M.[BOYPT] <pentie@gmail.com>
 "
 " URL:		http://www.friggeri.net/projets/vimblog/
 "           http://pigeond.net/blog/2009/05/07/vimpress-again/
@@ -32,7 +33,7 @@
 "    - A mod of a mod of a mod of Vimpress.   
 "    - A vim plugin fot writting your wordpress blog.
 "
-" Version:	2.1.0
+" Version:	2.1.2
 "
 " Configure: Add blog configure into your .vimrc (password optional)
 "
@@ -345,12 +346,27 @@ def blog_save(pub = "draft"):
         if edit_type == "post":
             strid = mw_api.newPost('', blog_username, blog_password, 
                     post_struct, is_publish)
-        elif edit_type == "page":
+        else:
             strid = wp_api.newPage('', blog_username, blog_password, 
                     post_struct, is_publish)
 
-        blog_meta_area_update(strid = strid)
         meta["strid"] = strid
+
+        # update meat area if slug or categories is empty
+        if edit_type == "post":
+            if meta["slug"] == '' or meta["cats"] == '':
+                data = mw_api.getPost(strid, blog_username, blog_password)
+                cats = ",".join(data["categories"]).encode("utf-8")
+                slug = data["wp_slug"].encode("utf-8")
+                meta["cats"] = cats
+                meta["slug"] = slug
+        else: 
+            if meta["slug"] == '':
+                data = wp_api.getPage('', strid, blog_username, blog_password)
+                slug = data["wp_slug"].encode("utf-8")
+                meta["slug"] = slug
+
+        blog_meta_area_update(**meta)
 
         notify = "%s %s.   ID=%s" % \
                 (edit_type.capitalize(), 
@@ -596,12 +612,12 @@ def blog_append_code(code_type = ""):
     if vimpress_view != 'edit':
         raise VimPressException("Command not available at list view.")
     html = \
-"""<pre escaped="True"%s>
+"""<pre %s>
 </pre>"""
     if code_type != "":
-        args = ' lang="%s" line="1"' % code_type
+        args = 'lang="%s" line="1"' % code_type
     else:
-        args = ''
+        args = 'lang="text"'
 
     row, col = vim.current.window.cursor 
     code_block = (html % args).split('\n')
