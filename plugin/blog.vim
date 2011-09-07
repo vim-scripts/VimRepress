@@ -33,7 +33,7 @@
 "    - A mod of a mod of a mod of Vimpress.   
 "    - A vim plugin fot writting your wordpress blog.
 "
-" Version:	2.1.4
+" Version:	2.1.5
 "
 " Configure: Add blog configure into your .vimrc (password optional)
 "
@@ -444,8 +444,14 @@ def blog_edit(edit_type, post_id):
             title = data["title"].encode("utf-8"), 
             slug = data["wp_slug"].encode("utf-8"))
     content = data["description"]
-    if "mt_text_more" in data:
-        content += u'<!--more-->' + data["mt_text_more"]
+    post_more = data.get("mt_text_more", '')
+    page_more = data.get("text_more", '')
+
+    if len(post_more) > 0:
+        content += '<!--more-->' + post_more
+    elif len(page_more) > 0:
+        content += '<!--more-->' + page_more
+
     content = content.encode("utf-8")
 
     if edit_type.lower() == "post":
