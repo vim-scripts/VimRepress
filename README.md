@@ -21,7 +21,7 @@ This is the release mirror repo of: https://bitbucket.org/pentie/vimrepress
  * BlogUpload   *[path/to/your/local/file]
  * BlogOpen     *[post id or full article URL]
  * BlogSwitch   [0,1,2 ... N, number of account in your config]
- * BlogCode     [type of lang for the <pre> element]
+ * BlogCode     [type of lang for the \<pre\> element]
  
   (Commands with a `*`, argument must be present.)
 
