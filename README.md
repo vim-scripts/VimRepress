@@ -1,6 +1,11 @@
 #Welcome
 VimRepress is a plugin for managing wordpress blog from Vim, using Markdown syntax.
 
+<<<<<<< HEAD
+=======
+This is the release mirror repo of: https://bitbucket.org/pentie/vimrepress
+
+>>>>>>> 0fea160c11f724cc2b866b78d841b8dd2d32e9d2
 ##Features
  * NEW/EDIT/DELETE wordpress Posts/Pages.
  * In both Markdown / HTML format.
@@ -42,8 +47,12 @@ Hardcoding the password is optional. If a password is not provided the plugin wi
 
 ###For Upgraded Users
 
+<<<<<<< HEAD
 Defining account info in `.vimrc` is now obsolesced, if you have correspond defination in `.vimrc` (for older version vimpress), they will automaticly copied into `~/.vimpressrc`, now you're safe to remove the VIMPRESS defination in `.vimrc`.
 
 Users from the 2.x.x versions of vimrepress, need to run the `markdown_posts_upgrade.py` to upgrade the their posts data to be compatible with the 3.x.x version of vimrepress, or their Markdown source can not be used to re-edit by a newer vimrepress. 
 
+=======
+Defining Account info in `.vimrc` is now obsolesced, if you have correspond defination in `.vimrc` (for older version vimpress), they will automaticly copied into `~/.vimpressrc`, now you're safe to remove the VIMPRESS defination in `.vimrc`.
+>>>>>>> 0fea160c11f724cc2b866b78d841b8dd2d32e9d2
 
