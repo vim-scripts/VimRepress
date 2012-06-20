@@ -61,7 +61,7 @@ class DataObject(object):
     DEFAULT_LIST_COUNT = "15"
     IMAGE_TEMPLATE = '<a href="%(url)s">' \
                      '<img title="%(file)s" alt="%(file)s" src="%(url)s"' \
-                     'class="aligncenter" /></a>'
+                     ' class="aligncenter" /></a>'
     MARKER = dict(bg="=========== Meta ============",
               mid="=============================",
               ed="========== Content ==========",
