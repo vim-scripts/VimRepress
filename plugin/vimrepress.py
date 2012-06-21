@@ -156,12 +156,9 @@ class DataObject(object):
             self.__xmlrpc = config["xmlrpc_obj"]
 
             # Setting tags and categories for completefunc
-            categories = config.get("categories", None)
-            if categories is None:
-                categories = [i["description"].encode("utf-8")
-                        for i in self.xmlrpc.get_categories()]
-                config["categories"] = categories
 
+            categories = [i["categoryName"].encode("utf-8")
+                    for i in self.xmlrpc.get_categories()]
             vim.command('let s:completable = "%s"' % '|'.join(categories))
             echomsg("done.")
         return self.__xmlrpc
@@ -283,6 +280,9 @@ class wp_xmlrpc(object):
 
     get_categories = lambda self: self.mw_api.getCategories('',
             self.username, self.password)
+
+    new_category = lambda self, category: self.wp_api.newCategory('',
+            self.username, self.password, category)
 
     new_media_object = lambda self, object_struct: \
             self.mw_api.newMediaObject('', self.username,
@@ -613,9 +613,9 @@ def blog_wise_open_view():
 @vim_encoding_check
 def vim_input(message = 'input', secret = False):
     vim.command('call inputsave()')
-    vim.command("let user_input = %s('%s :')" % (("inputsecret" if secret else "input"), message))
+    vim.command("let s:user_input = %s('%s :')" % (("inputsecret" if secret else "input"), message))
     vim.command('call inputrestore()')
-    return vim.eval('user_input')
+    return vim.eval('s:user_input')
 
 
 #################################################
@@ -657,12 +657,29 @@ def blog_new(edit_type = "post", currentContent = None):
     Creates a new editing buffer of specified type.
     @params edit_type - either "post" or "page"
     """
-    if edit_type.lower() not in ("post", "page"):
+    if edit_type.lower() not in ("post", "page", "category"):
         raise VimPressException("Invalid option: %s " % edit_type)
-    blog_wise_open_view()
-    g_data.current_post = ContentStruct(edit_type = edit_type)
-    cp = g_data.current_post
-    cp.fill_buffer()
+
+    if edit_type.lower() == "category":
+        category_name = vim_input("New Category name")
+        category_slug = vim_input("Category slug (optional)")
+        ret = g_data.xmlrpc.new_category(dict(name = category_name, slug = category_slug))
+
+        if type(ret) is int:
+            echomsg("Category '%s' created with ID %d. Updating local cache ... "
+                    % (category_name, ret))
+            categories = [i["categoryName"].encode("utf-8")
+                    for i in g_data.xmlrpc.get_categories()]
+            vim.command('let s:completable = "%s"' % '|'.join(categories))
+            echomsg("Done.")
+        else:
+            echoerr("Category create ERROR: " + str(ret))
+
+    else:
+        blog_wise_open_view()
+        g_data.current_post = ContentStruct(edit_type = edit_type)
+        cp = g_data.current_post
+        cp.fill_buffer()
 
 
 @view_switch(view = "edit")
@@ -935,3 +952,5 @@ def blog_config_switch(index = -1, refresh_list = False):
     if refresh_list:
         blog_list(keep_type = True)
     echomsg("Vimpress switched to '%s'@'%s'" % (g_data.blog_username, g_data.blog_url))
+
+

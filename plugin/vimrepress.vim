@@ -57,19 +57,26 @@ if !has("python")
     finish
 endif
 
-function! CompSave(ArgLead, CmdLine, CursorPos)
+let s:py_loaded = 0
+let s:vimpress_dir = fnamemodify(expand("<sfile>"), ":p:h")
+
+function! s:CompSave(ArgLead, CmdLine, CursorPos)
   return "publish\ndraft\n"
 endfunction
 
-function! CompPrev(ArgLead, CmdLine, CursorPos)
+function! s:CompPrev(ArgLead, CmdLine, CursorPos)
   return "local\npublish\ndraft\n"
 endfunction
 
-function! CompEditType(ArgLead, CmdLine, CursorPos)
+function! s:CompEditType(ArgLead, CmdLine, CursorPos)
   return "post\npage\n"
 endfunction
 
-function! Completable(findstart, base)
+function! s:CompNewType(ArgLead, CmdLine, CursorPos)
+  return "post\npage\ncategory\n"
+endfunction
+
+function! s:Completable(findstart, base)
   if a:findstart
     " locate the start of the word
     let line = getline('.')
@@ -90,10 +97,7 @@ function! Completable(findstart, base)
   endif
 endfun
 
-let s:py_loaded = 0
-let s:vimpress_dir = fnamemodify(expand("<sfile>"), ":p:h")
-
-function! PyCMD(pyfunc)
+function! s:PyCMD(pyfunc)
     if (s:py_loaded == 0)
         exec("cd " . s:vimpress_dir)
         let s:pyfile = fnamemodify("vimrepress.py", ":p")
@@ -104,12 +108,11 @@ function! PyCMD(pyfunc)
     exec('python ' . a:pyfunc)
 endfunction
 
-command! -nargs=? -complete=custom,CompEditType BlogList call PyCMD('blog_list(<f-args>)')
-command! -nargs=? -complete=custom,CompEditType BlogNew call PyCMD('blog_new(<f-args>)')
-command! -nargs=? -complete=custom,CompSave BlogSave call PyCMD('blog_save(<f-args>)')
-command! -nargs=? -complete=custom,CompPrev BlogPreview call PyCMD('blog_preview(<f-args>)')
-command! -nargs=1 -complete=file BlogUpload call PyCMD('blog_upload_media(<f-args>)')
-command! -nargs=1 BlogOpen call PyCMD('blog_guess_open(<f-args>)')
-command! -nargs=? BlogSwitch call PyCMD('blog_config_switch(<f-args>)')
-command! -nargs=? BlogCode call PyCMD('blog_append_code(<f-args>)')
-
+command! -nargs=? -complete=custom,s:CompEditType BlogList call s:PyCMD('blog_list(<f-args>)')
+command! -nargs=? -complete=custom,s:CompNewType BlogNew call s:PyCMD('blog_new(<f-args>)')
+command! -nargs=? -complete=custom,s:CompSave BlogSave call s:PyCMD('blog_save(<f-args>)')
+command! -nargs=? -complete=custom,s:CompPrev BlogPreview call s:PyCMD('blog_preview(<f-args>)')
+command! -nargs=1 -complete=file BlogUpload call s:PyCMD('blog_upload_media(<f-args>)')
+command! -nargs=1 BlogOpen call s:PyCMD('blog_guess_open(<f-args>)')
+command! -nargs=? BlogSwitch call s:PyCMD('blog_config_switch(<f-args>)')
+command! -nargs=? BlogCode call s:PyCMD('blog_append_code(<f-args>)')
