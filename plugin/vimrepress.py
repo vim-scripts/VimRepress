@@ -607,7 +607,7 @@ def blog_wise_open_view():
     else:
         vim.command(":new")
     vim.command('setl syntax=blogsyntax')
-    vim.command('setl completefunc=Completable')
+    vim.command('setl completefunc=vimrepress#CateComplete')
 
 
 @vim_encoding_check

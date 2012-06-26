@@ -76,7 +76,7 @@ function! s:CompNewType(ArgLead, CmdLine, CursorPos)
   return "post\npage\ncategory\n"
 endfunction
 
-function! s:Completable(findstart, base)
+function! vimrepress#CateComplete(findstart, base)
   if a:findstart
     " locate the start of the word
     let line = getline('.')
