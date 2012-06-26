@@ -1,0 +1,4 @@
+doc/tags
+.hg
+.svn
+.hg*
