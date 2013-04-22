@@ -194,7 +194,7 @@ class DataObject(object):
                 except vim.error:
                     pass
                 else:
-                    # wirte config to `~/.vimpressrc`,
+                    # write config to `~/.vimpressrc`,
                     # coding account in .vimrc is obsolesced.
                     if not os.path.exists(confile) and \
                             self.__config is not None:
@@ -207,7 +207,7 @@ class DataObject(object):
                             confpsr.write(f)
 
                         echomsg("Your Blog accounts are now copied to "
-                                "`~/.vimpressrc', definding account info "
+                                "`~/.vimpressrc', defining account info "
                                 "in `.vimrc` is now obsolesced, and may "
                                 "lead to secret leak if you share your "
                                 "vim configuration with public. Please "
