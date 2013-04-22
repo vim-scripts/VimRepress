@@ -82,6 +82,7 @@ class DataObject(object):
 
     blog_username = property(lambda self: self.xmlrpc.username)
     blog_url = property(lambda self: self.xmlrpc.blog_url)
+    store_markdown = property(lambda self: self.xmlrpc.store_markdown)
     conf_index = property(lambda self: self.__conf_index)
     current_post_id = property(lambda self: self.xmlrpc.current_post_id,
             lambda self, d: setattr(self.xmlrpc, "current_post_id", d))
@@ -144,6 +145,7 @@ class DataObject(object):
                     blog_username = config['username']
                     blog_password = config.get('password', '')
                     blog_url = config['blog_url']
+                    store_markdown = config.get('store_markdown', 'y')
                 except KeyError, e:
                     raise VimPressException("Configuration error: %s" % e)
                 echomsg("Connecting to '%s' ... " % blog_url)
@@ -151,7 +153,7 @@ class DataObject(object):
                     blog_password = vim_input(
                             "Enter password for %s" % blog_url, True)
                 config["xmlrpc_obj"] = wp_xmlrpc(blog_url,
-                        blog_username, blog_password)
+                        blog_username, blog_password, store_markdown)
 
             self.__xmlrpc = config["xmlrpc_obj"]
 
@@ -167,9 +169,9 @@ class DataObject(object):
     def config(self):
         if self.__config is None or len(self.__config) == 0:
 
-            confpsr = SafeConfigParser()
+            confpsr = SafeConfigParser({'store_markdown': 'y'})
             confile = os.path.expanduser("~/.vimpressrc")
-            conf_options = ("blog_url", "username", "password")
+            conf_options = ("blog_url", "username", "password", "store_markdown")
 
             if os.path.exists(confile):
                 conf_list = []
@@ -224,10 +226,11 @@ class DataObject(object):
 
 class wp_xmlrpc(object):
 
-    def __init__(self, blog_url, username, password):
+    def __init__(self, blog_url, username, password, store_markdown):
         self.blog_url = blog_url
         self.username = username
         self.password = password
+        self.store_markdown = store_markdown
         p = xmlrpclib.ServerProxy(os.path.join(blog_url, "xmlrpc.php"))
         self.mw_api = p.metaWeblog
         self.wp_api = p.wp
@@ -410,14 +413,16 @@ class ContentStruct(object):
 
         #Translate markdown and save in custom fields.
         if meta["editformat"].lower() == "markdown":
-            for f in struct["custom_fields"]:
-                if f["key"] == G.CUSTOM_FIELD_KEY:
-                    f["value"] = rawtext
-                    break
-             # Not found, add new custom field.
-            else:
-                field = dict(key=G.CUSTOM_FIELD_KEY, value=rawtext)
-                struct["custom_fields"].append(field)
+            if g_data.store_markdown == 'y':
+                # Store markdown in custom field only when enabled
+                for f in struct["custom_fields"]:
+                    if f["key"] == G.CUSTOM_FIELD_KEY:
+                        f["value"] = rawtext
+                        break
+                ## Not found, add new custom field.
+                else:
+                    field = dict(key=G.CUSTOM_FIELD_KEY, value=rawtext)
+                    struct["custom_fields"].append(field)
 
             struct["description"] = self.html_text = markdown.markdown(rawtext)
         else:
