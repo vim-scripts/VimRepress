@@ -910,7 +910,7 @@ def blog_guess_open(what):
         if blog_index != -1:
             guess_id = re.search(r"\S+?p=(\d+)$", what)
 
-            # permantlinks
+            # permalinks
             if guess_id is None:
 
                 # try again for /archives/%post_id%
@@ -937,7 +937,7 @@ def blog_guess_open(what):
             if blog_index != -1 and blog_index != g_data.conf_index:
                 blog_config_switch(blog_index)
 
-        # Uesr input something not a usabe url, try numberic
+        # User input not a url, try numeric
         else:
             try:
                 post_id = str(int(what))
