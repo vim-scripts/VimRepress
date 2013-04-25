@@ -3,6 +3,7 @@ if version < 600
 elseif exists("b:current_syntax")
  finish
 endif
+runtime! syntax/html.vim
 sy match  blogeditorEntry       "^ *[0-9]*\t.*$"
 sy match  blogeditorComment     '^".*$'
 sy match  blogeditorIdent       '^"[^:]*:'

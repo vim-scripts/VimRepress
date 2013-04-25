@@ -461,9 +461,11 @@ class ContentStruct(object):
             if field["key"] == G.CUSTOM_FIELD_KEY:
                 meta['editformat'] = "Markdown"
                 self.raw_text = content = field["value"]
+                vim.command('setl syntax=md_blogsyntax')
                 break
         else:
             self.raw_text = content
+            vim.command('setl syntax=html_blogsyntax')
 
         meta["content"] = content
 
@@ -611,7 +613,7 @@ def blog_wise_open_view():
         vim.command('setl nomodified')
     else:
         vim.command(":new")
-    vim.command('setl syntax=blogsyntax')
+    vim.command('setl syntax=md_blogsyntax')
     vim.command('setl completefunc=vimrepress#CateComplete')
 
 
