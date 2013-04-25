@@ -1,14 +1,14 @@
 #Welcome
-VimRepress is a plugin for managing wordpress blog from Vim, using Markdown syntax.
+VimRepress is a plugin for managing WordPress blog from Vim, using Markdown syntax.
 
 ##Features
- * NEW/EDIT/DELETE wordpress Posts/Pages.
+ * NEW/EDIT/DELETE WordPress Posts/Pages.
  * In both Markdown / HTML format.
- * Markdown text stored in the custom fields of wordpress.
+ * Markdown text can be configured to be stored in the custom fields of WordPress.
  * Upload attachments.
  * Insert code highlight section.
  * Preview a posts in local compiled version, or remote draft.
- * wordpress.com account supported.
+ * WordPress.com account supported.
  * Multiple account supported.
 
 ##Commands Reference
@@ -33,12 +33,20 @@ Create file `~/.vimpressrc` in the following format:
     username = admin
     password = 123456
 
+    [Blog1]
+    blog_url = https://blog1.wordpress.com/
+    username = someone
+    password =
+    store_markdown = n
+
     [BlogWhatEver]
     blog_url = https://someone.wordpress.com/
     username = someone
     password =
 
 Hardcoding the password is optional. If a password is not provided the plugin will prompt for one the first time it's needed.
+
+`store_markdown` is also optional. If not specified then Markdown text will be stored in custom fields of WordPress. If set to `n` then the Markdown text will not be stored.
 
 ###For Upgraded Users
 
