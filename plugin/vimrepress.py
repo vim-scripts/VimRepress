@@ -461,9 +461,11 @@ class ContentStruct(object):
             if field["key"] == G.CUSTOM_FIELD_KEY:
                 meta['editformat'] = "Markdown"
                 self.raw_text = content = field["value"]
+                vim.command('setl syntax=md_blogsyntax')
                 break
         else:
             self.raw_text = content
+            vim.command('setl syntax=html_blogsyntax')
 
         meta["content"] = content
 
@@ -611,7 +613,7 @@ def blog_wise_open_view():
         vim.command('setl nomodified')
     else:
         vim.command(":new")
-    vim.command('setl syntax=blogsyntax')
+    vim.command('setl syntax=md_blogsyntax')
     vim.command('setl completefunc=vimrepress#CateComplete')
 
 
@@ -908,7 +910,7 @@ def blog_guess_open(what):
         if blog_index != -1:
             guess_id = re.search(r"\S+?p=(\d+)$", what)
 
-            # permantlinks
+            # permalinks
             if guess_id is None:
 
                 # try again for /archives/%post_id%
@@ -935,7 +937,7 @@ def blog_guess_open(what):
             if blog_index != -1 and blog_index != g_data.conf_index:
                 blog_config_switch(blog_index)
 
-        # Uesr input something not a usabe url, try numberic
+        # User input not a url, try numeric
         else:
             try:
                 post_id = str(int(what))
