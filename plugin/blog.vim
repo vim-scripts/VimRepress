@@ -119,7 +119,7 @@ def exception_check(func):
         except IOError, e:
             echoerr("network error: %s" % e)
         except Exception, e:
-            echoerr("something wrong: %s" % e)
+            echoerr("something wrong: %s" % traceback.format_exc())
             raise
 
     return __check
@@ -623,14 +623,20 @@ def vim_encoding_check(func):
                     "correctly.")
         elif orig_enc != "utf-8":
             modified = vim.eval("&modified")
+            
+            # CONVERTS CURRENT BUFFER TO UTF-8
             buf_list = '\n'.join(vim.current.buffer).decode(orig_enc).encode('utf-8').splitlines()
             del vim.current.buffer[:]
             vim.command("setl encoding=utf-8")
-            vim.current.buffer[0] = buf_list[0]
-            if len(buf_list) > 1:
-                vim.current.buffer.append(buf_list[1:])
+
+            # 2016-12-05: JSTEWART: FIXED INDEX ERROR BY CHANGING FROM 1 TO 0
+            # REFILL BUFFER AFTER CONVERSION
+            if len(buf_list) > 0:
+                vim.current.buffer.append(buf_list[0:])
+
             if modified == '0':
                 vim.command('setl nomodified')
+
         return func(*args, **kw)
     return __check
 
@@ -679,14 +685,28 @@ def blog_wise_open_view():
     """
     Wisely decides whether to wipe out the content of current buffer or open a new splited window.
     """
-    if vim.current.buffer.name is None and \
-            (vim.eval('&modified') == '0' or
-                len(vim.current.buffer) == 1):
+
+    curBuf  = vim.current.buffer
+    bufname = curBuf.name
+    bEmpty  = False
+    bNoMod  = False
+    
+    if( vim.eval('&modified') == '0' ):
+       bNoMod = True
+
+    if( (len(curBuf) <= 1) and (len(curBuf[0]) <= 1) ):
+       bEmpty = True
+
+    # 2016-12-05: JSTEWART: BUFFER NAME LENGTH CHECK IN ADDITION TO None CHECK
+    #                       WINDOWS WERE MULTIPLYING LIKE RABBITS SINCE
+    #                       buffer.name NEVER SEEMS TO EVALUATE TO None
+    if ( ((bufname is None) or (len(bufname) == 0)) and (bNoMod or bEmpty) ):
         vim.command('setl modifiable')
         del vim.current.buffer[:]
         vim.command('setl nomodified')
     else:
         vim.command(":new")
+
     vim.command('setl syntax=blogsyntax')
     vim.command('setl completefunc=Completable')
 
