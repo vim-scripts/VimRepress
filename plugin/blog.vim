@@ -85,6 +85,7 @@ import urllib
 import xmlrpclib
 import re
 import os
+import sys, traceback
 import mimetypes
 import webbrowser
 import tempfile
@@ -105,6 +106,23 @@ except ImportError:
         markdown = markdown_stub()
 
 
+# 2016-12-06: JSTEWART: ADJUST LINE NUMBERS FOR UNHANDLED EXCEPTIONS
+#                       UNROLL STACK UP TO 14 ITEMS DEEP
+def MsgException(e) :
+    
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+ 
+    szMsg = "{}\n".format(repr(e))
+    i = 1 
+
+    for (szFile, nLine, szMod, szLine) in traceback.extract_tb(exc_traceback, 14) :
+        # OFFSET LINE NUMBER TO BEGINNING OF PYTHON TEXT
+        szMsg += "[{}] {}:{}\n".format(i, "VimRepress", nLine + 81)
+        i +=1
+
+    echoerr(szMsg)
+
+
 def exception_check(func):
     def __check(*args, **kwargs):
         try:
@@ -118,8 +136,8 @@ def exception_check(func):
                 echoerr("xmlrpc error: %s" % e.faultString.encode("utf-8"))
         except IOError, e:
             echoerr("network error: %s" % e)
-        except Exception, e:
-            echoerr("something wrong: %s" % traceback.format_exc())
+        except Exception as e:
+            MsgException(e)
             raise
 
     return __check
