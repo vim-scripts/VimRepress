@@ -1,4 +1,4 @@
-# VimRepressPy3
+# VimRepressPy3: Edit your WordPress blog from Vim.
 
    - A mod of a mod of a mod of Vimpress, updated for Python 3.
    - A vim plugin for writting your WordPress blog.
