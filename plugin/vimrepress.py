@@ -4,6 +4,7 @@ import urllib.request, urllib.parse, urllib.error
 import xmlrpc.client
 import re
 import os
+import pprint
 import sys
 import mimetypes
 import webbrowser
@@ -39,7 +40,7 @@ class VRP_CONST:
 
     @staticmethod
     def DEFAULT_LIST_COUNT():
-        return "15"
+        return str(vim.current.window.height)
 
     @staticmethod
     def CUSTOM_FIELD_KEY():
@@ -874,20 +875,21 @@ def blog_list(edit_type = "post", keep_type = False):
     echomsg("Press <Enter> to edit. <Delete> to move to trash.")
 
 
+"""
+    Uploads a file to the blog.
+    @params file_path - the file's path
+"""
 @exception_check
 @vim_encoding_check
 @view_switch(assert_view = "edit")
 def blog_upload_media(file_path):
-    """
-    Uploads a file to the blog.
-    @params file_path - the file's path
-    """
+
     if not os.path.exists(file_path):
         raise VRP_Exception("File does not exist: %s" % file_path)
 
     name = os.path.basename(file_path)
     filetype = mimetypes.guess_type(file_path)[0]
-    with open(file_path) as f:
+    with open(file_path, mode='rb') as f:
         bits = xmlrpc.client.Binary(f.read())
 
     result = g_data.oXMLRPC.new_media_object(dict(name = name, type = filetype, bits = bits))
