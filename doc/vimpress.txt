@@ -1,15 +1,16 @@
-*vimpress.txt*   Plugin for managing wordpress blog from Vim.
+*vimpress.txt*   Plugin for managing WordPress blog from Vim.
 
-Script:   blog.vim
+Script:   vimrepress.vim
 Authors:  Adrien Friggeri <mailto:adrien@friggeri.net>
           Pigeond <http://pigeond.net/blog/>
-          * Preston M.[BOYPT] <mailto:pentie@gmail.com>
+          Preston M.[BOYPT] <mailto:pentie@gmail.com>
           Justin Sattery <mailto:justin.slattery@fzysqr.com>
-          Lenin Lee <mailto:lenin.lee@gmail.com>      
-          * Conner McDaniel <mailto:connermcd@gmail.com>
-    (* Currently developing)
-    Conner's Repository: https://github.com/connermcd/VimRepress
-    Preston's Repository: https://bitbucket.org/pentie/vimrepress
+          Lenin Lee <mailto:lenin.lee@gmail.com>
+          Conner McDaniel <mailto:connermcd@gmail.com>
+          * Jason Stewart <mailto:support@eggplantsd.com>
+
+    (* Python 3 Version)
+    https://github.com/BourgeoisBear/VimRepressPy3
 
 License:  Same terms as Vim itself (see |license|)
 
@@ -45,20 +46,20 @@ For Upgraded Users:
 Hardcoding the password is optional. If a password is not provided,
 the plugin will prompt for one the first time it's needed.
 
-If you need Markdown support, simply run `sudo apt-get install python-markdown' in Ubuntu. 
+If you need Markdown support, simply run `sudo apt-get install python-markdown' in Ubuntu.
 
-If you use other distributions (or OSs), refer to your package manager or the python-markdown 
+If you use other distributions (or OSs), refer to your package manager or the python-markdown
 project page: http://www.freewisdom.org/projects/python-markdown/Installation
 
 *COMMANDS*
 
-Vimpress Commands (parameters in square brackets are optional): 
+Vimpress Commands (parameters in square brackets are optional):
 >
     :BlogList [<edit_type>] [<count>]
 <   Lists a specified number of blog posts or pages for the current blog
-    starting the with most recent.  In this view, you can press <enter> 
+    starting the with most recent.  In this view, you can press <enter>
     to open a post for edit, or press <delete> to move a post to trash.
-    The Delete function doesn't actually remove your post, but move to 
+    The Delete function doesn't actually remove your post, but move to
     the trash.
     [<edit_type>] - either post or page, [Default post].
     [<count>]  - number to display (only for posts, Default 30)
@@ -69,17 +70,17 @@ Vimpress Commands (parameters in square brackets are optional):
 >
     :BlogSave [<save_type>]
 <   Saves the current editing window.
-    [<save_type>] - either post or publish. [Default:draft] 
+    [<save_type>] - either post or publish. [Default:draft]
 >
     :BlogPreview [<save_type>]
-<   If set to local, converts the editing window to HTML and displays it 
-    locally in a file browser. Otherwise, the command is the same as 
+<   If set to local, converts the editing window to HTML and displays it
+    locally in a file browser. Otherwise, the command is the same as
     :BlogSave except that it opens a preview of the post or page on the blog.
     [<save_type>] - either local, post, or publish. [Default:local]
 >
     :BlogOpen <post-link-or-id>
-<   Opens the specified post. 
-    <post-link-or-id> - link you copied from the browser, or simply the 
+<   Opens the specified post.
+    <post-link-or-id> - link you copied from the browser, or simply the
                         numberic post id.
 >
     :BlogSwitch [<index>]
@@ -122,7 +123,7 @@ Some commands list above contain special usage, example below may clearify them 
     :BlogSave             -  Save (defautely published.)
     :BlogSave draft       -  Save as draft.
 
-    :BlogPreview local    -  Preview page/post locally in your browser. 
+    :BlogPreview local    -  Preview page/post locally in your browser.
     :BlogPreview publish  -  Same as `:BlogSave publish' with brower opened.
 
     :BlogOpen 679
