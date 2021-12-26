@@ -101,16 +101,13 @@ def exception_check(func):
 try:
     import markdown
 except ImportError:
-    try:
-        import markdown2 as markdown
-    except ImportError:
-        class markdown_stub(object):
-            def markdown(self, n):
-                raise VRP_Exception("The package python-markdown is "
-                        "required and is either not present or not properly "
-                        "installed.")
+    class markdown_stub(object):
+        def markdown(self, *args):
+            raise VRP_Exception("The package python-markdown is "
+                    "required and is either not present or not properly "
+                    "installed.")
 
-        markdown = markdown_stub()
+    markdown = markdown_stub()
 
 class DataObject(object):
 
@@ -443,7 +440,17 @@ class ContentStruct(object):
                 field = dict(key=VRP_CONST.CUSTOM_FIELD_KEY(), value=rawtext)
                 struct["custom_fields"].append(field)
 
-            struct["description"] = self.html_text = markdown.markdown(rawtext)
+            struct["description"] = self.html_text = markdown.markdown(
+                    rawtext,
+                    extensions=['fenced_code','codehilite'],
+                    extension_configs={
+                        'codehilite': {
+                            'use_pygments': True,
+                            'css_class':    'pygment',
+                            'noclasses':    False,
+                            'guess_lang':   False,
+                            'linenums':     False
+                        }})
         else:
             struct["description"] = self.html_text = rawtext
 
