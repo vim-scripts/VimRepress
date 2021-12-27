@@ -14,7 +14,7 @@
 
 ### Configuration:
 
-Create account configure as `~/.vimpressrc` in the following format:
+Create account configure as `~/.vimpressrc` in the following format (be sure to `chmod 600` this file):
 
 ```
 [Blog0]
