@@ -9,7 +9,7 @@
 
    - Vim 7.3+ with Python 3 support
    - Python Environment matched wtih Vim's support
-   - `python-markdown` / `python-markdown2` installed
+   - requires `markdown` & `pygments` modules
    - WordPress 3.0.0+
 
 ### Configuration:
@@ -31,7 +31,6 @@ password =
 ### Command Examples:
 
 ```
-
    :BlogList             -  List 30 recent posts.
    :BlogList page        -  List 30 recent pages.
    :BlogList post 100    -  List 100 recent posts.
@@ -49,7 +48,6 @@ password =
    :BlogOpen http://your-first-blog.com/archives/679
    :BlogOpen http://your-second-blog.com/?p=679
    :BlogOpen http://your-third-blog.com/with-your-custom-permalink
-
 ```
 
 For more details, type `:help vimpress` after this plugin has been loaded.
