@@ -11,6 +11,17 @@ import webbrowser
 import tempfile
 import configparser
 
+try:
+    import markdown
+except ImportError:
+    class markdown_stub(object):
+        def markdown(self, markdown, extensions, extension_configs):
+            raise VRP_Exception("The package python-markdown is "
+                    "required and is either not present or not properly "
+                    "installed.")
+
+    markdown = markdown_stub()
+
 # -------------------------------- CONSTANTS --------------------------------
 
 class VRP_CONST:
@@ -97,17 +108,6 @@ def exception_check(func):
     return __check
 
 # ---------------------------------- /UTLILS ----------------------------------
-
-try:
-    import markdown
-except ImportError:
-    class markdown_stub(object):
-        def markdown(self, *args):
-            raise VRP_Exception("The package python-markdown is "
-                    "required and is either not present or not properly "
-                    "installed.")
-
-    markdown = markdown_stub()
 
 class DataObject(object):
 
@@ -215,6 +215,13 @@ class DataObject(object):
 
             confpsr = configparser.ConfigParser()
             confile = os.path.expanduser("~/.vimpressrc")
+            o_stat = os.stat(confile)
+            flags_ugo = 0x1FF & o_stat.st_mode
+            if flags_ugo != 0o600:
+                raise VRP_Exception(
+                        "Please set permissions on ~/.vimpressrc to 600.  "
+                        "(cmd: chmod 600 ~/.vimpressrc)")
+
             conf_options = ("blog_url", "username", "password")
 
             if os.path.exists(confile):
@@ -384,11 +391,17 @@ class ContentStruct(object):
                 vim.current.buffer[end + 1:])
 
     def fill_buffer(self):
+
         meta = dict(strid="", title="", slug="",
                 cats="", tags="", editformat="HTML", edittype="")
         meta.update(self.buffer_meta)
         meta_text = self.META_TEMPLATE.format(**meta).splitlines()
-        vim.command("set ft=html")
+
+        if meta['editformat'].lower() == "markdown":
+            vim.command("set ft=markdown")
+        else:
+            vim.command("set ft=html")
+
         vim.current.buffer[0] = meta_text[0]
         vim.current.buffer.append(meta_text[1:])
         content = self.buffer_meta.get("content", ' ').splitlines()
