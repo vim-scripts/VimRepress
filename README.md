@@ -1,9 +1,10 @@
-# VimRepressPy3: Edit your WordPress blog from Vim.
+# VimRepressPy3
 
-   - A mod of a mod of a mod of Vimpress, updated for Python 3.
-   - A vim plugin for writting your WordPress blog.
+### Edit your WordPress blog from Vim.
+
    - Write with Markdown, control posts format precisely.
    - Stores Markdown rawtext in WordPress custom fields.
+   - Supports github-style fenced code-blocks.
 
 ### Requirements:
 
@@ -27,6 +28,22 @@ blog_url = https://someone.wordpress.com/
 username = someone
 password =
 ```
+
+### Pygments CSS
+
+To get pygments higlighting for fenced codeblocks, you will need to generate pygments CSS for your preferred colorscheme, and include it with your site CSS:
+
+```sh
+pygmentize -f html -a .pygment -S <style_name>
+```
+
+To see the list of available pygments styles on your computer:
+
+```sh
+pygmentize -L styles
+```
+
+Or use their online demo at https://pygments.org/demo/.
 
 ### Command Examples:
 
